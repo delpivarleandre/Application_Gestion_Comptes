@@ -1,195 +1,220 @@
-﻿using Microsoft.VisualBasic.FileIO; //Permet de gerer fichier.txt / donnees. 
-using System; //importe les principales fonctionnalites du Framework.
-using System.IO; //Permet la lecture ou l'ecriture dans des fichiers ou flux de donnees.
-using System.Windows.Forms; //Permet la creation d'applications windows.
-using System.Security.Cryptography; //Fournit des services de chiffrement, comprenant l'encodage et le décodage sécurisé des données.
-using System.Text; //Permet des encodages de caractères ASCII et Unicode.
+﻿using MySql.Data.MySqlClient;//Permet d'utiliser la base de données
+using System;//importe les principales fonctionnalites du Framework.
+using System.Windows.Forms;//Permet la creation d'applications windows.
 
-namespace Appli
+
+namespace Application_avec_base_de_donnée
 {
-
-    public partial class login : Form
+    public class login
     {
-        //Pour savoir si le bouton est a l'etat 0 ou 1.
-        bool affectation = true;
+        private string user = null;
+        private string mdp = null;
+        private string userCrea = null;
+        private string mdpCrea = null;
+        private int codeCrea;
+        private string NDCProfil = null;
+        private string MDPProfil = null;
+        private int CodeProfil;
 
-        public static string Chiffrer(string text)
+
+        public void SetUser(string TextUser)
         {
-            //Methode base64(64 caracteres) pour chiffrer les mots de passes.
-            return Convert.ToBase64String(
-                ProtectedData.Protect(Encoding.Unicode.GetBytes(text), null, DataProtectionScope.CurrentUser));
-            //protectedData = System.Security.Cryptography
-            //Encoding = System.Text
+            user = TextUser;
         }
-
-        public static string Dechiffrer(string text)
+        public string GetUser()
         {
-            return Encoding.Unicode.GetString(
-                ProtectedData.Unprotect(Convert.FromBase64String(text), null, DataProtectionScope.CurrentUser));
+            return user;
         }
-
-        public login()
+        public void SetMdp(string TextMdp)
         {
-            InitializeComponent();
+            mdp = TextMdp;
         }
-
-        private void login_Load(object sender, EventArgs e)
+        public string GetMdp()
         {
-
-            using (TextFieldParser parser = new TextFieldParser(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Comptes.txt")))
-            {
-                //Ouvrir le document texte a l'ouverture de la page 
-                parser.Delimiters = new string[] { "," };
-                while (true)
-                {
-                    string[] LineData = parser.ReadFields();
-                    if (LineData == null)
-                    {
-                        break;
-                    }
-                    //Ajouter les lignes 
-                    DataGV.Rows.Add(new object[] { LineData[0], LineData[1], LineData[2] });
-                }
-
-                //Dimensionne automatiquement le DataGrid
-                DataGV.AutoResizeRows(DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders);
-                DataGV.AllowUserToAddRows = false;
-            }
+            return mdp;
         }
-
-        private void connexion_Click(object sender, EventArgs e)
+        public void SetUserCrea(string TextUserCrea)
         {
-            //Entrer dans le compte.
-            if (textBoxNomDeCompte.Text == "admin" && textBoxMotDePasse.Text == "admin")
-            {
-                //Taille de la 2 eme page.
-                tabControl1.SelectedTab = tabPage2;
-                Size = new System.Drawing.Size(568, 339);
-            }
-            else
-            {
-                MessageBox.Show("Nom de compte ou mot de passe incorrect ");
-            }
-
-            //Remplace ce qui est ecrit par du vide.
-            textBoxNomDeCompte.Text = "";
-            textBoxMotDePasse.Text = "";
+            userCrea = TextUserCrea;
         }
-
-        private void creation_Click(object sender, EventArgs e)
+        public string GetUserCrea()
         {
-            //Ouvre la page ajouter.
-            ajouter ajouter = new ajouter();
-            ajouter.Show();
-
-            MessageBox.Show("Maintenance");
-            ajouter.Close();
+            return userCrea;
         }
-
-        private void textBoxCompte_KeyDown(object sender, KeyEventArgs e)
+        public void SetMdpCrea(string TextMdpCrea)
         {
-            // pouvoir appuyer sur entrer (connexion).
-            if (e.KeyCode == Keys.Enter)
-            {
-                connexion_Click(this, new EventArgs());
-            }
+            mdpCrea = TextMdpCrea;
         }
-
-        private void AjouterButton_Click(object sender, EventArgs e)
+        public string GetMdpCrea()
         {
-            //ajouter ce qu'on ecrit dans les TextBoxs avec chiffrage du mot de passe.
-            string mdp2 = AjouterMotDePasseBox.Text.ToString();
-            mdp2 = Chiffrer(mdp2);
-            DataGV.AllowUserToAddRows = false;
-            DataGV.Rows.Add(AjouterReseauBox.Text, AjouterAdresseBox.Text, mdp2);
-            //Remplacer le texte pas du vide apres l'ajout.
-            AjouterMotDePasseBox.Text = "";
-            AjouterAdresseBox.Text = "";
-            AjouterReseauBox.Text = "";
+            return mdpCrea;
         }
-
-        private void Affichermdp_Click(object sender, EventArgs e)
+        public void SetCode(int TextCode)
         {
+            codeCrea = TextCode;
+        }
+        public int GetCode()
+        {
+            return codeCrea;
+        }
+        public void SetNDCProfil(string TextNDCProfil)
+        {
+            NDCProfil = TextNDCProfil;
+        }
+        public string GetNDCProfil()
+        {
+            return NDCProfil;
+        }
+        public void SetMDPProfil(string TextMDPProfil)
+        {
+            MDPProfil = TextMDPProfil;
+        }
+        public string GetMDPProfil()
+        {
+            return MDPProfil;
+        }
+        public void SetCodeProfil(int TextCodeProfil)
+        {
+            CodeProfil = TextCodeProfil;
+        }
+        public int GetCodeProfil()
+        {
+            return CodeProfil;
+        }
+        public int  validlogin()
+        {
+            //Test le compte donné,Si fonctionne alors retourne 1.
+            string connetionString = null;
+            connetionString = "server=mysql-leandredelpivar.alwaysdata.net;Port=3306; UserID=170958; Password=leandre; database=leandredelpivar_applicationameliore";
+            MySqlConnection cnn = new MySqlConnection(connetionString);
             try
             {
-                //Afficher le mot de passe ou non.
-                if (affectation == true)
+                cnn.Open();
+                const string query = "SELECT count(*)  FROM Login WHERE user=@user AND pass=@pass";
+                var cmd = new MySqlCommand(query, cnn);
+                //Déclarer parametre pour eviter les injections
+                cmd.Parameters.Add(new MySqlParameter("@user", MySqlDbType.VarChar));
+                cmd.Parameters["@user"].Value = user;
+                cmd.Parameters.Add(new MySqlParameter("@pass", MySqlDbType.VarChar));
+                cmd.Parameters["@pass"].Value = mdp;
+                Int32 count = Convert.ToInt32(cmd.ExecuteScalar());
+                cnn.Close();
+                if (count == 0)
                 {
-                    for (int r = 0; r < DataGV.Rows.Count; r++)
-                    {
-                        if (DataGV[2, r].Value != null)
-                        {
-                            string mdp = DataGV[2, r].Value.ToString();
-                            DataGV[2, r].Value = Dechiffrer(mdp);
-                        }
-                    }
-                    affectation = false;
+                    return 0;
+                }
+                else
+                    return 1;
+            }
+            catch (Exception )
+            {
+                return 0;
+            }
+        
+        }
+        public int validloginCrea()
+        {
+            //Teste dans la base de données,Savoir si il est possible de creer le compte.
+            string connetionString = null;
+            connetionString = "server=mysql-leandredelpivar.alwaysdata.net;Port=3306; UserID=170958; Password=leandre; database=leandredelpivar_applicationameliore";
+            MySqlConnection cnn = new MySqlConnection(connetionString);
+            try
+            {
+                // Connexion à la base de données
+                cnn.Open();
+                const string query = "SELECT count(*)  FROM Login WHERE user=@user";
+                var cmd = new MySqlCommand(query, cnn);
+                //Déclarer parametre pour eviter les injections
+                cmd.Parameters.Add(new MySqlParameter("@user", MySqlDbType.VarChar));
+                cmd.Parameters["@user"].Value = userCrea;
+                Int32 count = Convert.ToInt32(cmd.ExecuteScalar());
+                cnn.Close();
+                if (count == 0)
+                {
+                    return 0;
                 }
                 else
                 {
-                    for (int r = 0; r < DataGV.Rows.Count; r++)
-                    {
-                        if (DataGV[2, r].Value != null)
-                        {
-                            string mdp = DataGV[2, r].Value.ToString();
-                            DataGV[2, r].Value = Chiffrer(mdp);
-                        }
-                    }
-                    affectation = true;
-                }
+                    return 1;
+                }   
+                
             }
-            catch (Exception PB)
+            catch (Exception)
             {
-                MessageBox.Show(PB.Message);
-            }
-        }
+                return 0;
 
-        private void SauvegarderButton_Click_1(object sender, EventArgs e)
+            }
+            
+        }
+        public int validloginprofil()
         {
-            //Sauvegarder les comptes.
-            TextWriter writer = new StreamWriter(@"Comptes.txt");
-            //En fonction du nombre de lignes .
-            for (int i = 0; i < DataGV.Rows.Count; i++)
+            //Teste dans la base de données,Savoir si il est possible de creer le compte.
+            string connetionString = null;
+            connetionString = "server=mysql-leandredelpivar.alwaysdata.net;Port=3306; UserID=170958; Password=leandre; database=leandredelpivar_applicationameliore";
+            MySqlConnection cnn = new MySqlConnection(connetionString);
+            try
             {
-                //En fonction du nombre de colonnes. 
-                for (int j = 0; j < DataGV.Columns.Count; j++)
+                // Connexion à la base de données
+                cnn.Open();
+                const string query = "SELECT count(*)  FROM Login WHERE user=@user";
+                var cmd = new MySqlCommand(query, cnn);
+                //Déclarer parametre pour eviter les injections
+                cmd.Parameters.Add(new MySqlParameter("@user", MySqlDbType.VarChar));
+                cmd.Parameters["@user"].Value = NDCProfil;
+                Int32 count = Convert.ToInt32(cmd.ExecuteScalar());
+                cnn.Close();
+                if (count == 0)
                 {
-                    writer.Write(DataGV.Rows[i].Cells[j].Value.ToString() + ",");
+                    return 0;
                 }
-                writer.WriteLine("");
-            }
-            writer.Close();
-            MessageBox.Show("Sauvegardé");
-        }
+                else
+                {
+                    return 1;
+                }
 
-        private void SupprimerButton_Click(object sender, EventArgs e)
-        {
-            //Suprimer ligne du tableau avec une verification si l'on veut vraiment le fermer.
-            if (MessageBox.Show("Voulez vous vraiment supprimer l'adresse ?", "DELETE", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            }
+            catch (Exception)
             {
-                try
-                {
-                    int index = DataGV.SelectedRows[0].Index;
-                    DataGV.Rows.RemoveAt(index);
-                }
-                catch (Exception Bug)
-                {
-                    MessageBox.Show(Bug.Message);
-                }
+                return 0;
 
             }
+
         }
 
-        private void DeconnectionButton_Click(object sender, EventArgs e)
+        public void CreationLogin()
         {
-            //Passer de la page 1 a la page 2.
-            tabControl1.SelectedTab = tabPage1;
+        //Permet de creer le compte de la base de données.
+            string connetionString = null;
+            connetionString = "server=mysql-leandredelpivar.alwaysdata.net;Port=3306; UserID=170958; Password=leandre; database=leandredelpivar_applicationameliore";
+            MySqlConnection cnn = new MySqlConnection(connetionString);
+           
+                String query = "INSERT INTO Login (user,pass,code) VALUES (@user,@pass,@code)";
+                using (MySqlCommand command = new MySqlCommand(query, cnn))
+                {
+                    command.Parameters.AddWithValue("@user", userCrea);
+                    command.Parameters.AddWithValue("@pass", mdpCrea);
+                    command.Parameters.AddWithValue("@code", codeCrea);
+                    cnn.Open();
+                    command.ExecuteNonQuery();
+                    MessageBox.Show("Votre compte est créé .", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
         }
-
-        private void QuitterButton_Click(object sender, EventArgs e)
+        public void ChangementLogin()
         {
-            //Fermer l'application
-            Close();
+            string connetionString = null;
+            connetionString = "server=mysql-leandredelpivar.alwaysdata.net;Port=3306; UserID=170958; Password=leandre; database=leandredelpivar_applicationameliore";
+            MySqlConnection cnn = new MySqlConnection(connetionString);
+
+            String query = "UPDATE Login, stockage SET Login.user=@user, Login.pass=@pass, Login.code=@code,stockage.iduser = @user";
+            using (MySqlCommand command = new MySqlCommand(query, cnn))
+            {
+                command.Parameters.AddWithValue("@user", NDCProfil);
+                command.Parameters.AddWithValue("@pass", MDPProfil);
+                command.Parameters.AddWithValue("@code", CodeProfil);
+                cnn.Open();
+                command.ExecuteNonQuery();
+                MessageBox.Show("Votre compte a été modifié .", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }
