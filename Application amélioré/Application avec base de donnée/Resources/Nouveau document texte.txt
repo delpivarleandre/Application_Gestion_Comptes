@@ -1,0 +1,3 @@
+this.textBoxCO = new PHTextBox("Nom d'utilisateur");
+            this.textBoxMDP = new PHTextBox("Mot de passe");
+388; 413
