@@ -9,9 +9,9 @@ namespace Application_avec_base_de_donnée
     {
         
             public CreationPage()
-        {
+            {
             InitializeComponent();
-        }
+            }
 
         login login = new login();
 
@@ -45,6 +45,5 @@ namespace Application_avec_base_de_donnée
             textBoxMDPCrea.UseSystemPasswordChar = true;
         }
     }
-
 }
 

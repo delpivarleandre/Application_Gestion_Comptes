@@ -1,8 +1,6 @@
 ﻿using System; //importe les principales fonctionnalites du Framework.
 using System.Windows.Forms; //Permet la creation d'applications windows.
 
-
-
 namespace Application_avec_base_de_donnée
 {
     public partial class Connexion : Form
@@ -34,11 +32,13 @@ namespace Application_avec_base_de_donnée
                 }
                 else
                 {
+                    Size = new System.Drawing.Size(759, 489);
+                    //Centrer l'application au centre de l'ecran.
+                    CenterToScreen();
+
                     tabControl1.SelectedTab = PageCompte;
                 }
-                Size = new System.Drawing.Size(759, 489);
-                //Centrer l'application au centre de l'ecran.
-                CenterToScreen();
+               
                 //Recupere le mot ecrit dans le textbox connexion.
                 stockage.SetUser2(textBoxCO.Text);
                 //Actualiser les comptes.
@@ -62,8 +62,7 @@ namespace Application_avec_base_de_donnée
             //Pouvoir appuyer sur entrer (connexion).
             if (e.KeyCode == Keys.Enter)
             {
-                buttonConnexion_Click(this, new EventArgs());
-                
+                buttonConnexion_Click(this, new EventArgs());              
             }
         }
         private void RacourciTouch1(object sender, KeyEventArgs e)
@@ -72,7 +71,6 @@ namespace Application_avec_base_de_donnée
             if (e.KeyCode == Keys.Enter)
             {
                 AjouterButton_Click(this, new EventArgs());
-
             }
         }
 
@@ -152,15 +150,13 @@ namespace Application_avec_base_de_donnée
                 else
                 {
                     MessageBox.Show("Erreur");
-                }
-               
+                }               
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
-
         private void SupprimerButton_Click(object sender, EventArgs e)
         {
             //Suprimer le compte.
@@ -177,13 +173,11 @@ namespace Application_avec_base_de_donnée
                 }
             }
         }
-
         private void DeconnectionButton_Click(object sender, EventArgs e)
         {
             //Passer de la page des comptes a la page de connexion.
             tabControl1.SelectedTab = PageCo;
             Size = new System.Drawing.Size(388, 413); 
-
         }
 
         private void QuitterButton_Click(object sender, EventArgs e)
@@ -191,24 +185,27 @@ namespace Application_avec_base_de_donnée
             //Fermer l'application.
             Close();
         }
-
         private void DataGV_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             //Permet de definir mon datagrind avec la ligne 0 pour supprimer.
             stockage.Setid(DataGV.Rows[e.RowIndex].Cells[0].Value.ToString());
-            
-
         }
-
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             Profil profil = new Profil();
             profil.Show();
         }
-
-        private void label1_Click(object sender, EventArgs e)
+        private void DataGV_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = this.DataGV.Rows[e.RowIndex];
+                stockage.SetnomReseau(row.Cells["reseau"].Value.ToString());
+                stockage.SetnomAdresse(row.Cells["user"].Value.ToString());
+                stockage.SetnomMotdepasse(row.Cells["pass"].Value.ToString());
+                affichage affichage = new affichage();
+                affichage.Show();
+            }
         }
     }
 }
