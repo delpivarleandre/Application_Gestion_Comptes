@@ -1,0 +1,13 @@
+C:\Users\delpi\source\repos\Application avec base de donnée\Application avec base de donnée\obj\Debug\Application_avec_base_de_donnée.CreationPage.resources
+C:\Users\delpi\source\repos\Application avec base de donnée\Application avec base de donnée\obj\Debug\Application_avec_base_de_donnée.Connexion.resources
+C:\Users\delpi\source\repos\Application avec base de donnée\Application avec base de donnée\obj\Debug\Application_avec_base_de_donnée.Properties.Resources.resources
+C:\Users\delpi\source\repos\Application avec base de donnée\Application avec base de donnée\obj\Debug\Application avec base de donnée.csproj.GenerateResource.cache
+C:\Users\delpi\source\repos\Application avec base de donnée\Application avec base de donnée\obj\Debug\Application avec base de donnée.csproj.CoreCompileInputs.cache
+C:\Users\delpi\source\repos\Application avec base de donnée\Application avec base de donnée\bin\Debug\Application avec base de donnée.exe.config
+C:\Users\delpi\source\repos\Application avec base de donnée\Application avec base de donnée\bin\Debug\Application avec base de donnée.exe
+C:\Users\delpi\source\repos\Application avec base de donnée\Application avec base de donnée\bin\Debug\Application avec base de donnée.pdb
+C:\Users\delpi\source\repos\Application avec base de donnée\Application avec base de donnée\bin\Debug\MySql.Data.dll
+C:\Users\delpi\source\repos\Application avec base de donnée\Application avec base de donnée\obj\Debug\Application avec base de donnée.csproj.CopyComplete
+C:\Users\delpi\source\repos\Application avec base de donnée\Application avec base de donnée\obj\Debug\Application avec base de donnée.exe
+C:\Users\delpi\source\repos\Application avec base de donnée\Application avec base de donnée\obj\Debug\Application avec base de donnée.pdb
+C:\Users\delpi\source\repos\Application avec base de donnée\Application avec base de donnée\obj\Debug\Application avec base de donnée.csprojAssemblyReference.cache
